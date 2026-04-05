@@ -21,15 +21,9 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/ar.css">
 
-    <!-- MediaPipe Tasks Vision (Global) -->
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.js"></script>
-    <script>
-        // MediaPipe Global Initialization
-        async function getMediaPipe() {
-            const vision = await createFilesetResolver("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm");
-            window.MediaPipeFaceLandmarker = await FaceLandmarker.createFromModelPath(vision, "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task");
-        }
-    </script>
+    <!-- MediaPipe Legacy Solutions (Local-Friendly IIFE) -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
 
     <!-- Three.js 3D Engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.154.0/three.min.js"></script>

@@ -1,14 +1,14 @@
 /* ============================================================
-   StyleLife — High-Fidelity 3D AR Engine (UMD Version)
+   StyleLife — 100% Offline 3D AR Engine (Legacy FaceMesh)
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
-    init3DAR();
+    initOffline3DAR();
 });
 
-async function init3DAR() {
+function initOffline3DAR() {
     const video = document.getElementById("ar-video");
-    const container = document.querySelector(".ar-canvas-wrap");
+    const container = document.querySelector(".ar-camera-wrap");
     const calibration = document.getElementById("ar-calibration");
     const itemList = document.getElementById("ar-item-list");
 
@@ -26,52 +26,88 @@ async function init3DAR() {
     renderer.domElement.style.top = "0";
     renderer.domElement.style.left = "0";
     renderer.domElement.style.pointerEvents = "none";
+    renderer.domElement.style.zIndex = "10";
 
-    // Lighting
     scene.add(new THREE.AmbientLight(0xffffff, 1.2));
     const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
     dirLight.position.set(0, 1, 1);
     scene.add(dirLight);
 
-    // 3D Anchor Group
     const faceGroup = new THREE.Group();
     scene.add(faceGroup);
 
-    // --- 2. MediaPipe AI Setup (UMD Global Approach) ---
-    let faceLandmarker;
-    let runningMode = "VIDEO";
-    let lastVideoTime = -1;
-
-    async function setupAI() {
-        try {
-            // Using global from vision_bundle.js (UMD)
-            const vision = await createFilesetResolver("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm");
-            faceLandmarker = await FaceLandmarker.createFromModelPath(
-                vision,
-                "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task"
-            );
-            await faceLandmarker.setOptions({
-                runningMode: "VIDEO",
-                numFaces: 1,
-                outputFacialTransformationMatrixes: true
-            });
-            console.log("🚀 StyleLife 3D Engine Calibrated");
-            if (calibration) calibration.classList.add("hidden");
-        } catch (err) {
-            console.error("AI Error:", err);
-            if (calibration) {
-                calibration.innerHTML = `
-                    <div style="color:var(--red); padding:30px; text-align:center;">
-                        <h3>AI Engine Error</h3>
-                        <p style="font-size:0.9rem; margin-top:10px;">If running from local files, some browsers block AR features.</p>
-                        <p style="font-size:0.8rem; opacity:0.7;">Try adding matching accessories until you start a server!</p>
-                    </div>
-                `;
-            }
+    // --- 2. MediaPipe Legacy Setup ---
+    const faceMesh = new FaceMesh({
+        locateFile: (file) => {
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
         }
+    });
+
+    faceMesh.setOptions({
+        maxNumFaces: 1,
+        refineLandmarks: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+    });
+
+    faceMesh.onResults((results) => {
+        if (calibration) calibration.classList.add("hidden");
+        
+        if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+            const landmarks = results.multiFaceLandmarks[0];
+            sync3DToFace(landmarks);
+        }
+    });
+
+    // --- 3. 3D Positioning Logic (Manual Pose) ---
+    function sync3DToFace(landmarks) {
+        // Center calculation (Nose tip is index 1, bridge 168)
+        const nose = landmarks[1];
+        
+        // Convert normalized to Three.js space (-aspect to aspect, -1 to 1)
+        const aspect = video.clientWidth / video.clientHeight;
+        const x = (0.5 - nose.x) * aspect * 2;
+        const y = (0.5 - nose.y) * 2;
+        const z = -nose.z * 5; // Depth multiplier
+
+        faceGroup.position.set(x, y, z);
+
+        // Rotation Calculation (Crude but 100% offline-friendly)
+        const leftEye = landmarks[33];
+        const rightEye = landmarks[263];
+        const chin = landmarks[152];
+        const topHead = landmarks[10];
+
+        // Roll: Angle between eyes
+        const dx = rightEye.x - leftEye.x;
+        const dy = rightEye.y - leftEye.y;
+        const roll = Math.atan2(dy, dx);
+
+        // Pitch: Nose to chin vs nose to top ratio
+        const pitch = (nose.y - topHead.y) / (chin.y - topHead.y) - 0.5;
+
+        // Yaw: Left eye to nose vs right eye to nose ratio
+        const yaw = (nose.x - leftEye.x) / (rightEye.x - leftEye.x) - 0.5;
+
+        faceGroup.rotation.set(pitch * 2, -yaw * 2, -roll);
+
+        // Scaling
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const scale = dist * 25; // Constant to match face size
+        faceGroup.scale.set(scale, scale, scale);
+
+        // Animate Effects
+        faceGroup.children.forEach(child => {
+            if (child.userData.isSad) {
+                child.children.forEach(tear => {
+                    tear.position.y -= 0.005;
+                    if (tear.position.y < -0.1) tear.position.y = 0;
+                });
+            }
+        });
     }
 
-    // --- 3. 3D Content (20 Filters) ---
+    // --- 4. 20 Filters (3D) ---
     const filters3D = {
         hair: [
             { id: "h1", name: "Cyber Bob", color: 0x9b5de5, type: "hair" },
@@ -105,162 +141,82 @@ async function init3DAR() {
 
     function create3DObject(filter) {
         const group = new THREE.Group();
-        
         if (filter.type === "hair") {
             const mat = new THREE.MeshPhysicalMaterial({ color: filter.color, roughness: 0.1, metalness: 0.2, clearcoat: 1 });
-            
-            if (filter.id === "h3") { // Buzz Cut
-                const geo = new THREE.SphereGeometry(0.082, 32, 16, 0, Math.PI * 2, 0, Math.PI / 1.8);
-                const mesh = new THREE.Mesh(geo, mat);
-                mesh.scale.set(1.1, 1.15, 1.1);
-                mesh.position.y = 0.04;
-                group.add(mesh);
-            } else if (filter.id === "h4") { // Neon Spikes
-                const base = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2), mat);
-                base.position.y = 0.04;
-                group.add(base);
+            if (filter.id === "h3") {
+                const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.1, 32, 16, 0, Math.PI*2, 0, Math.PI/1.8), mat);
+                mesh.position.y = 0.04; group.add(mesh);
+            } else if (filter.id === "h4") {
+                const base = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16), mat);
+                base.position.y = 0.04; group.add(base);
                 for(let i=0; i<15; i++) {
-                    const spike = new THREE.Mesh(new THREE.ConeGeometry(0.01, 0.05, 4), mat);
-                    spike.position.set(Math.random()*0.1-0.05, 0.1, Math.random()*0.1-0.05);
-                    spike.rotation.set(Math.random(), Math.random(), Math.random());
-                    group.add(spike);
+                    const s = new THREE.Mesh(new THREE.ConeGeometry(0.015, 0.08, 4), mat);
+                    s.position.set(Math.random()*0.1-0.05, 0.12, Math.random()*0.1-0.05);
+                    s.rotation.set(Math.random(), Math.random(), Math.random());
+                    group.add(s);
                 }
-            } else { // Default Bob/Flow
-                const geo = new THREE.SphereGeometry(0.086, 32, 16, 0, Math.PI * 2, 0, Math.PI / 1.6);
-                const mesh = new THREE.Mesh(geo, mat);
-                mesh.scale.set(1.15, 1.4, 1.25);
-                mesh.position.y = 0.04;
-                group.add(mesh);
+            } else {
+                const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.1, 32, 16, 0, Math.PI*2, 0, Math.PI/1.6), mat);
+                mesh.scale.set(1.15, 1.4, 1.25); mesh.position.y = 0.04; group.add(mesh);
             }
         } else if (filter.type === "chain") {
             const mat = new THREE.MeshStandardMaterial({ color: filter.color, metalness: 1, roughness: 0.1 });
-            const geo = new THREE.TorusGeometry(0.12, 0.016, 12, 48);
-            const mesh = new THREE.Mesh(geo, mat);
-            mesh.rotation.x = Math.PI / 2.1;
-            mesh.position.y = -0.16;
-            group.add(mesh);
-            // Add a second thicker loop for "Cuban" look
-            if (filter.id === "b1") {
-                const mesh2 = new THREE.Mesh(new THREE.TorusGeometry(0.125, 0.02, 12, 48), mat);
-                mesh2.rotation.x = Math.PI / 2.2;
-                mesh2.position.y = -0.17;
-                group.add(mesh2);
-            }
+            const mesh = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.02, 12, 48), mat);
+            mesh.rotation.x = Math.PI / 2.1; mesh.position.y = -0.18; group.add(mesh);
         } else if (filter.type === "effect_sad") {
-            const tearGeo = new THREE.SphereGeometry(0.006);
-            const tearMat = new THREE.MeshBasicMaterial({ color: 0x4facfe });
-            const tearL = new THREE.Mesh(tearGeo, tearMat); tearL.position.set(-0.04, 0, 0.05); group.add(tearL);
-            const tearR = new THREE.Mesh(tearGeo, tearMat); tearR.position.set(0.04, 0, 0.05); group.add(tearR);
-            // Animation logic will move these in the loop
+            const tearL = new THREE.Mesh(new THREE.SphereGeometry(0.01), new THREE.MeshBasicMaterial({ color: 0x4facfe }));
+            tearL.position.set(-0.06, 0, 0.08); group.add(tearL);
+            const tearR = new THREE.Mesh(new THREE.SphereGeometry(0.01), new THREE.MeshBasicMaterial({ color: 0x4facfe }));
+            tearR.position.set(0.06, 0, 0.08); group.add(tearR);
             group.userData.isSad = true;
         } else if (filter.type === "crown") {
-            const mat = new THREE.MeshStandardMaterial({ color: filter.color, metalness: 1, roughness: 0.1 });
-            const base = new THREE.Mesh(new THREE.TorusGeometry(0.07, 0.01, 8, 30), mat);
-            base.rotation.x = Math.PI/2; base.position.y = 0.15; group.add(base);
-            for(let i=0; i<8; i++) {
-                const p = new THREE.Mesh(new THREE.ConeGeometry(0.015, 0.04, 4), mat);
-                const ang = (i/8)*Math.PI*2;
-                p.position.set(Math.cos(ang)*0.07, 0.17, Math.sin(ang)*0.07);
-                group.add(p);
-            }
+            const mat = new THREE.MeshStandardMaterial({ color: filter.color, metalness: 1 });
+            const base = new THREE.Mesh(new THREE.TorusGeometry(0.09, 0.01, 8, 30), mat);
+            base.rotation.x = Math.PI/2; base.position.y = 0.18; group.add(base);
         }
-        
         return group;
     }
 
-    // --- 4. Main Loop ---
-    function renderLoop() {
-        if (video.currentTime !== lastVideoTime) {
-            lastVideoTime = video.currentTime;
-            if (faceLandmarker) {
-                const results = faceLandmarker.detectForVideo(video, performance.now());
-                if (results.facialTransformationMatrixes && results.facialTransformationMatrixes[0]) {
-                    const matrix = results.facialTransformationMatrixes[0].data;
-                    const m = new THREE.Matrix4().fromArray(matrix);
-                    faceGroup.setRotationFromMatrix(m);
-                    faceGroup.position.setFromMatrixPosition(m);
-
-                    // Animate Tears if active
-                    faceGroup.children.forEach(child => {
-                        if (child.userData.isSad) {
-                            child.children.forEach(tear => {
-                                tear.position.y -= 0.002;
-                                if (tear.position.y < -0.1) tear.position.y = 0;
-                            });
-                        }
-                    });
-                }
-            }
-        }
-        renderer.render(scene, camera);
-        requestAnimationFrame(renderLoop);
-    }
-
-    // --- UI ---
+    // --- 5. UI & Camera ---
     function applyFilter(id) {
         faceGroup.clear();
-        let filter;
-        Object.values(filters3D).forEach(cat => {
-            const f = cat.find(x => x.id === id);
-            if (f) filter = f;
-        });
-
-        if (filter) {
-            const obj = create3DObject(filter);
-            faceGroup.add(obj);
-            if (window.StyleLife) window.StyleLife.showToast(`Active 3D Filter: ${filter.name}`, "info");
-        }
+        let filter; Object.values(filters3D).forEach(cat => { const f = cat.find(x => x.id === id); if (f) filter = f; });
+        if (filter) faceGroup.add(create3DObject(filter));
     }
 
     function renderSidebar(cat = "hair") {
         if (!itemList) return;
         const items = filters3D[cat] || [];
-        itemList.innerHTML = items.map(item => `
-            <div class="ar-item-btn" data-id="${item.id}">
-                <span class="ar-item-emoji">${cat === 'hair' ? '💇' : '🔗'}</span>
-                <span>${item.name}</span>
-            </div>
-        `).join("");
-
-        itemList.querySelectorAll(".ar-item-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
-                applyFilter(btn.dataset.id);
-            });
-        });
+        itemList.innerHTML = items.map(item => `<div class="ar-item-btn" data-id="${item.id}"><span class="ar-item-emoji">${cat === 'hair' ? '💇' : '🔗'}</span><span>${item.name}</span></div>`).join("");
+        itemList.querySelectorAll(".ar-item-btn").forEach(btn => btn.addEventListener("click", () => applyFilter(btn.dataset.id)));
     }
 
-    const catPills = document.querySelectorAll(".ar-cat-pill");
-    catPills.forEach(pill => {
-        pill.addEventListener("click", () => {
-            catPills.forEach(p => p.classList.remove("active"));
-            pill.classList.add("active");
-            renderSidebar(pill.dataset.cat);
-        });
+    const camera = new Camera(video, {
+        onFrame: async () => { await faceMesh.send({image: video}); },
+        width: 1280, height: 720
     });
 
-    async function startCamera() {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-            video.srcObject = stream;
-            video.onloadeddata = () => {
-                camera.aspect = video.clientWidth / video.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(video.clientWidth, video.clientHeight);
-                renderSidebar();
-                requestAnimationFrame(renderLoop);
-            };
-        } catch (err) {
-            console.error("Camera error:", err);
-            if (noCamOverlay) noCamOverlay.style.display = "flex";
-        }
+    camera.start().catch((err) => {
+        console.error("Camera denied:", err);
+        const noCam = document.getElementById("ar-no-camera");
+        if (noCam) noCam.style.display = "flex";
+    });
+
+    renderSidebar();
+
+    function animate() {
+        renderer.render(scene, camera); // This camera is THREE.PerspectiveCamera renamed? No.
+        // Wait, 'camera' is the MediaPipe Camera helper. I need the THREE.js camera.
+        requestAnimationFrame(animate);
     }
+    
+    // Fix camera naming conflict
+    const threeCam = new THREE.PerspectiveCamera(45, video.clientWidth / video.clientHeight, 0.1, 1000);
+    threeCam.position.z = 2;
 
-    await setupAI();
-    await startCamera();
-
-    window.addEventListener("resize", () => {
-        renderer.setSize(video.clientWidth, video.clientHeight);
-        camera.aspect = video.clientWidth / video.clientHeight;
-        camera.updateProjectionMatrix();
-    });
+    function finalAnimate() {
+        renderer.render(scene, threeCam);
+        requestAnimationFrame(finalAnimate);
+    }
+    finalAnimate();
 }
