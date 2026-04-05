@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Duty | PetLife Universe</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .duty-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        .pet-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .pet-card.critical {
+            border-color: #ff4d4d;
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 77, 77, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+        }
+        .pet-avatar {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .stat-group {
+            margin-top: 20px;
+        }
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .pb-bg {
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .pb-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <div class="logo-icon"><i class="fas fa-paw"></i></div>
+            <span>PetLife</span>
+        </a>
+        <div class="navbar-links">
+            <a href="feed.html">PetScroll</a>
+            <a href="duty.html" class="active">Pet Duty</a>
+            <a href="ar.html">Pet Mirror</a>
+            <a href="world.html">Open World</a>
+        </div>
+        <div class="navbar-actions">
+            <a href="profile.html" class="nav-avatar">U</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <header style="margin-top: 60px; text-align: center;">
+            <h1 style="font-size: 3rem; font-weight: 900;">Active <span class="gradient-text">Duties</span></h1>
+            <p style="color: var(--text-muted);">Manage your adopted species and ensure their survival. Death is permanent.</p>
+        </header>
+
+        <section class="duty-grid" id="duty-grid">
+            <!-- Populated by JS -->
+        </section>
+
+        <div id="no-pets" style="display: none; text-align: center; margin-top: 100px; opacity: 0.5;">
+            <i class="fas fa-box-open" style="font-size: 4rem; margin-bottom: 20px;"></i>
+            <h3>No Active Pets</h3>
+            <p>Go to the Pet Mirror to adopt your first mythical companion.</p>
+        </div>
+    </main>
+
+    <script>
+        const dutyGrid = document.getElementById("duty-grid");
+        const noPets = document.getElementById("no-pets");
+
+        const petsRegistry = [
+            { id: "m1", name: "Baby Dragon", emoji: "🐉", color: "#ff5555" },
+            { id: "m2", name: "Phoenix Chick", emoji: "🔥", color: "#ffaa00" },
+            { id: "r1", name: "Golden Retriever", emoji: "🐶", color: "#ffdd88" },
+            { id: "c1", name: "Robo-Hound", emoji: "🤖", color: "#00ffff" }
+        ];
+
+        function renderDuty() {
+            let hasAny = false;
+            dutyGrid.innerHTML = "";
+            
+            petsRegistry.forEach(p => {
+                const raw = localStorage.getItem(`petlife_stats_${p.id}`);
+                if (raw) {
+                    hasAny = true;
+                    const stats = JSON.parse(raw);
+                    const isCritical = stats.health < 30 || stats.hunger < 20;
+                    
+                    const card = document.createElement("div");
+                    card.className = `pet-card ${isCritical ? 'critical' : ''}`;
+                    card.innerHTML = `
+                        <div class="pet-avatar">${p.emoji}</div>
+                        <h3 style="margin: 0; font-weight: 800;">${p.name}</h3>
+                        <p style="font-size: 0.8rem; background: #f0f0f0; display: inline-block; padding: 4px 10px; border-radius: 10px; margin-top: 5px;">ID: ${p.id}</p>
+                        
+                        <div class="stat-group">
+                            <div class="stat-label"><span>HEALTH</span><span>${Math.round(stats.health)}%</span></div>
+                            <div class="pb-bg"><div class="pb-fill" style="width: ${stats.health}%; background: #48C9A3;"></div></div>
+                        </div>
+                        <div class="stat-group">
+                            <div class="stat-label"><span>HUNGER</span><span>${Math.round(stats.hunger)}%</span></div>
+                            <div class="pb-bg"><div class="pb-fill" style="width: ${stats.hunger}%; background: #FF7E67;"></div></div>
+                        </div>
+                        <div class="stat-group" style="margin-top: 30px;">
+                            <button onclick="location.href='ar.html'" class="btn btn-primary btn-sm" style="width: 100%;">GOTO MIRROR <i class="fas fa-camera"></i></button>
+                        </div>
+                    `;
+                    dutyGrid.appendChild(card);
+                }
+            });
+
+            if (!hasAny) noPets.style.display = "block";
+        }
+
+        renderDuty();
+        setInterval(renderDuty, 3000); // Live updates
+    </script>
+</body>
+</html>

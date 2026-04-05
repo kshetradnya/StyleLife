@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StyleLife AR | Real-time Fashion Mirror</title>
+    <title>PetLife AR | Your Virtual Pet Mirror</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,8 +22,8 @@
     <link rel="stylesheet" href="css/ar.css">
 
     <!-- MediaPipe Legacy Solutions (Local-Friendly IIFE) -->
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 
     <!-- Three.js 3D Engine -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.154.0/three.min.js"></script>
@@ -38,9 +38,10 @@
         </a>
         
         <div class="navbar-links">
-            <a href="feed.html">StyleScroll Feed</a>
-            <a href="studio.html">Studio</a>
-            <a href="ar.html" class="active">AR Mode</a>
+            <a href="feed.html">PetScroll Feed</a>
+            <a href="duty.html">Pet Duty</a>
+            <a href="ar.html" class="active">Pet Mirror (AR)</a>
+            <a href="world.html">Open World</a>
         </div>
         
         <div class="navbar-actions">
@@ -58,20 +59,36 @@
                 
                 <div class="ar-status-bar" id="ar-status-bar">
                     <span class="ar-recording-dot"></span>
-                    <span id="ar-status-text">Mirroring Active</span>
+                    <span id="ar-status-text">Pet Mirror Active</span>
+                </div>
+
+                <!-- Pet Status HUD -->
+                <div class="pet-status-hud" id="pet-status-hud">
+                    <div class="stat-bar-item">
+                        <i class="fas fa-heart text-red"></i>
+                        <div class="stat-progress-bg"><div class="stat-progress" id="stat-health" style="width: 100%;"></div></div>
+                    </div>
+                    <div class="stat-bar-item">
+                        <i class="fas fa-utensils text-orange"></i>
+                        <div class="stat-progress-bg"><div class="stat-progress" id="stat-hunger" style="width: 80%;"></div></div>
+                    </div>
+                    <div class="stat-bar-item">
+                        <i class="fas fa-soap text-blue"></i>
+                        <div class="stat-progress-bg"><div class="stat-progress" id="stat-hygiene" style="width: 90%;"></div></div>
+                    </div>
                 </div>
                 
                 <!-- Overlay Flash Effect -->
                 <div class="ar-flash" id="ar-flash"></div>
                 
-                <!-- AR Capture Controls -->
+                <!-- Pet Care Controls -->
                 <div class="ar-controls">
                     <div class="ar-side-btns">
-                        <div class="ar-icon-btn" id="toggle-grid-btn" title="Toggle Grid Overlay">
-                            <i class="fas fa-th-large"></i>
+                        <div class="ar-icon-btn pet-action-btn" id="feed-pet-btn" title="Feed Pet">
+                            <i class="fas fa-cookie-bite"></i>
                         </div>
-                        <div class="ar-icon-btn" id="flip-camera-btn" title="Flip Camera">
-                            <i class="fas fa-sync"></i>
+                        <div class="ar-icon-btn pet-action-btn" id="bathe-pet-btn" title="Bathe Pet">
+                            <i class="fas fa-shower"></i>
                         </div>
                     </div>
                     
@@ -80,10 +97,10 @@
                     </button>
                     
                     <div class="ar-side-btns">
-                        <div class="ar-icon-btn" id="toggle-filter-btn" title="Toggle Filters">
-                            <i class="fas fa-filter"></i>
+                        <div class="ar-icon-btn" id="open-world-jump" title="Go to Open World">
+                            <i class="fas fa-globe-americas"></i>
                         </div>
-                        <div class="ar-icon-btn" id="ar-settings-btn" title="AR Settings">
+                        <div class="ar-icon-btn" id="ar-settings-btn" title="Pet Settings">
                             <i class="fas fa-cog"></i>
                         </div>
                     </div>
@@ -92,8 +109,9 @@
                 <!-- Calibration Overlay -->
                 <div class="ar-calibration-overlay" id="ar-calibration">
                     <div class="ar-loading-spinner"></div>
-                    <div class="ar-calibration-text">Calibrating StyleLife AI...</div>
-                    <div class="ar-calibration-sub">Align your face to the center of the frame</div>
+                    <div class="ar-calibration-text" id="ar-cal-text">Finding your Pet...</div>
+                    <div class="ar-calibration-sub" id="ar-cal-sub">Wait for the AR Portal to open</div>
+                    <div id="ar-debug-log" style="font-family: monospace; font-size: 0.7rem; color: var(--text-muted); margin-top: 15px; max-width: 80%; text-align: center;"></div>
                 </div>
 
                 <!-- No Camera State Overlay -->
@@ -105,18 +123,18 @@
                 </div>
             </div>
 
-            <!-- Sidebar: AR Library -->
+            <!-- Sidebar: Pet Adoption -->
             <aside class="ar-sidebar">
-                <div class="ar-sidebar-header">AR Overlays</div>
+                <div class="ar-sidebar-header">Choose Your Pet</div>
                 
                 <div class="ar-category-pills">
-                    <div class="ar-cat-pill active" data-cat="hair"><i class="fas fa-user"></i> Hairstyles</div>
-                    <div class="ar-cat-pill" data-cat="acc"><i class="fas fa-gem"></i> Accessories</div>
-                    <div class="ar-cat-pill" data-cat="filters"><i class="fas fa-wand-magic-sparkles"></i> Filters</div>
+                    <div class="ar-cat-pill active" data-cat="mythical"><i class="fas fa-dragon"></i> Mythical</div>
+                    <div class="ar-cat-pill" data-cat="real"><i class="fas fa-dog"></i> Real</div>
+                    <div class="ar-cat-pill" data-cat="cyber"><i class="fas fa-microchip"></i> Cyber</div>
                 </div>
                 
                 <div class="ar-item-list" id="ar-item-list">
-                    <!-- Populated by JS -->
+                    <!-- Pets Populated by JS -->
                 </div>
             </aside>
         </div>
