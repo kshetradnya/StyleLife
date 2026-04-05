@@ -1,0 +1,21 @@
+{
+  "name": "StyleScroll",
+  "short_name": "StyleScroll",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0d0d1a",
+  "theme_color": "#9b5de5",
+  "description": "Premium virtual styling and fashion social platform with AR features.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3050/3050221.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3050/3050221.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

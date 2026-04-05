@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleLife AR | Real-time Fashion Mirror</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/ar.css">
+
+    <!-- StyleLife Custom CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/ar.css">
+
+    <!-- MediaPipe Tasks Vision (Global) -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.js"></script>
+    <script>
+        // MediaPipe Global Initialization
+        async function getMediaPipe() {
+            const vision = await createFilesetResolver("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm");
+            window.MediaPipeFaceLandmarker = await FaceLandmarker.createFromModelPath(vision, "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task");
+        }
+    </script>
+
+    <!-- Three.js 3D Engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.154.0/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.154.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body>
+    <!-- Main Navigation (Minimal for AR) -->
+    <nav class="navbar" id="main-nav">
+        <a href="index.html" class="navbar-brand">
+            <div class="logo-icon"><i class="fas fa-scroll"></i></div>
+            <span>StyleLife</span>
+        </a>
+        
+        <div class="navbar-links">
+            <a href="feed.html">StyleScroll Feed</a>
+            <a href="studio.html">Studio</a>
+            <a href="ar.html" class="active">AR Mode</a>
+        </div>
+        
+        <div class="navbar-actions">
+            <button class="btn btn-secondary btn-sm" id="ar-exit-btn">Exit AR</button>
+            <a href="profile.html" class="nav-avatar" id="nav-user-avatar">U</a>
+        </div>
+    </nav>
+
+    <main class="ar-page">
+        <div class="ar-layout">
+            <!-- Camera View -->
+            <div class="ar-camera-wrap" id="ar-camera-wrap">
+                <video id="ar-video" autoplay playsinline></video>
+                <canvas id="ar-canvas"></canvas>
+                
+                <div class="ar-status-bar" id="ar-status-bar">
+                    <span class="ar-recording-dot"></span>
+                    <span id="ar-status-text">Mirroring Active</span>
+                </div>
+                
+                <!-- Overlay Flash Effect -->
+                <div class="ar-flash" id="ar-flash"></div>
+                
+                <!-- AR Capture Controls -->
+                <div class="ar-controls">
+                    <div class="ar-side-btns">
+                        <div class="ar-icon-btn" id="toggle-grid-btn" title="Toggle Grid Overlay">
+                            <i class="fas fa-th-large"></i>
+                        </div>
+                        <div class="ar-icon-btn" id="flip-camera-btn" title="Flip Camera">
+                            <i class="fas fa-sync"></i>
+                        </div>
+                    </div>
+                    
+                    <button class="ar-capture-btn" id="ar-capture-btn" title="Capture Snapshot">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    
+                    <div class="ar-side-btns">
+                        <div class="ar-icon-btn" id="toggle-filter-btn" title="Toggle Filters">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <div class="ar-icon-btn" id="ar-settings-btn" title="AR Settings">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calibration Overlay -->
+                <div class="ar-calibration-overlay" id="ar-calibration">
+                    <div class="ar-loading-spinner"></div>
+                    <div class="ar-calibration-text">Calibrating StyleLife AI...</div>
+                    <div class="ar-calibration-sub">Align your face to the center of the frame</div>
+                </div>
+
+                <!-- No Camera State Overlay -->
+                <div class="ar-no-camera" id="ar-no-camera" style="display: none;">
+                    <div class="no-cam-icon"><i class="fas fa-video-slash"></i></div>
+                    <h3>Camera Access Required</h3>
+                    <p>To use the StyleScroll AR Mirror, please grant camera permissions in your browser.</p>
+                    <button class="btn btn-primary btn-sm" id="request-camera-btn">Enable Camera</button>
+                </div>
+            </div>
+
+            <!-- Sidebar: AR Library -->
+            <aside class="ar-sidebar">
+                <div class="ar-sidebar-header">AR Overlays</div>
+                
+                <div class="ar-category-pills">
+                    <div class="ar-cat-pill active" data-cat="hair"><i class="fas fa-user"></i> Hairstyles</div>
+                    <div class="ar-cat-pill" data-cat="acc"><i class="fas fa-gem"></i> Accessories</div>
+                    <div class="ar-cat-pill" data-cat="filters"><i class="fas fa-wand-magic-sparkles"></i> Filters</div>
+                </div>
+                
+                <div class="ar-item-list" id="ar-item-list">
+                    <!-- Populated by JS -->
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Post Capture Modal -->
+    <div class="modal-overlay" id="capture-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Snapshot Captured!</h3>
+                <button class="modal-close" id="close-modal-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="width: 100%; border-radius: 12px; overflow: hidden; margin-bottom: 20px;">
+                <img src="" id="captured-preview" style="width: 100%; display: block; border-radius: 12px;">
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-secondary btn-sm" style="flex: 1;" id="download-capture-btn">Download</button>
+                <button class="btn btn-primary btn-sm" style="flex: 1;" id="post-capture-btn">Create Post</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/ar.js"></script>
+</body>
+</html>

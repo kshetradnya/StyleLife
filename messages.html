@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleLife Messages | Chat with Other Creators</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/messages.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <div class="logo-icon"><i class="fas fa-scroll"></i></div>
+            <span>StyleLife</span>
+        </a>
+        
+        <div class="navbar-links">
+            <a href="feed.html">StyleScroll Feed</a>
+            <a href="studio.html">Studio</a>
+            <a href="ar.html">AR Mode</a>
+        </div>
+        
+        <div class="navbar-actions">
+            <button class="theme-toggle" id="theme-toggle" title="Toggle Light/Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <a href="profile.html" class="nav-avatar" id="nav-user-avatar">U</a>
+        </div>
+    </nav>
+
+    <main class="messages-page">
+        <!-- Sidebar: Conversations -->
+        <aside class="messages-sidebar" id="messages-sidebar">
+            <div class="messages-sidebar-header">
+                <h1 class="messages-sidebar-title">Messages</h1>
+                <div class="messages-sidebar-actions">
+                    <button class="icon-btn" title="New Message"><i class="fas fa-plus"></i></button>
+                    <button class="icon-btn" title="Settings"><i class="fas fa-cog"></i></button>
+                </div>
+            </div>
+            
+            <div class="messages-search">
+                <div class="input-icon-wrap">
+                    <i class="fas fa-search input-prefix-icon"></i>
+                    <input type="text" class="input-field" placeholder="Search chats..." id="search-chats">
+                </div>
+            </div>
+            
+            <div class="messages-list" id="conversation-list">
+                <!-- Conversations will be dynamically loaded here -->
+            </div>
+        </aside>
+
+        <!-- Main Area: Chat -->
+        <section class="chat-area" id="chat-area">
+            <!-- Active Chat State -->
+            <div id="active-chat" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="chat-header">
+                    <div class="chat-user">
+                        <button class="icon-btn" id="back-to-list" style="display: none; width: 32px; height: 32px; margin-right: 8px;">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="conversation-avatar">
+                            <img src="" id="chat-header-avatar" alt="User Avatar">
+                            <span class="online-status"></span>
+                        </div>
+                        <div class="chat-user-info">
+                            <h2 class="chat-user-name" id="chat-header-name">StyleGuru_24</h2>
+                            <span class="chat-user-status">Online Now</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-actions">
+                        <button class="icon-btn" title="Start Style Session"><i class="fas fa-magic"></i></button>
+                        <button class="icon-btn" title="View Profile"><i class="fas fa-user"></i></button>
+                        <button class="icon-btn" title="More Options"><i class="fas fa-ellipsis-v"></i></button>
+                    </div>
+                </div>
+                
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Messages will be injected here -->
+                </div>
+                
+                <div class="chat-input-area">
+                    <button class="icon-btn" title="Attach Media"><i class="fas fa-camera"></i></button>
+                    <button class="icon-btn" title="Share Look"><i class="fas fa-scroll"></i></button>
+                    
+                    <div class="chat-input-wrapper">
+                        <input type="text" class="chat-input" placeholder="Type a message..." id="message-input">
+                        <i class="far fa-smile emoji-btn"></i>
+                    </div>
+                    
+                    <button class="send-btn" id="send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty Chat State -->
+            <div id="empty-chat" style="display: none; align-items: center; justify-content: center; height: 100%; flex-direction: column; gap: 20px;">
+                <div style="font-size: 60px; opacity: 0.1;"><i class="fas fa-comment-dots"></i></div>
+                <h2 style="font-family: var(--font-display); font-size: 1.4rem; color: var(--text-muted);">Select a conversation to start chatting</h2>
+                <div style="max-width: 300px; text-align: center; font-size: 0.9rem; color: var(--text-muted);">Share your latest looks directly with friends and get instant feedback.</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Global Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/messages.js"></script>
+</body>
+</html>

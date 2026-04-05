@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleLife Feed | StyleScroll Trends</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/feed.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="main-nav">
+        <a href="index.html" class="navbar-brand">
+            <div class="logo-icon"><i class="fas fa-scroll"></i></div>
+            <span>StyleLife</span>
+        </a>
+        
+        <div class="navbar-links">
+            <a href="index.html">Home</a>
+            <a href="feed.html" class="active">StyleScroll Feed</a>
+            <a href="studio.html">Studio</a>
+            <a href="ar.html">AR Mode</a>
+        </div>
+        
+        <div class="navbar-actions">
+            <button class="theme-toggle" id="theme-toggle" title="Toggle Light/Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <a href="messages.html" class="icon-btn" title="Messages">
+                <i class="fas fa-comment"></i>
+                <div class="unread-badge" style="position: absolute; top: -5px; right: -5px; width: 14px; height: 14px;">3</div>
+            </a>
+            <a href="profile.html" class="nav-avatar" id="nav-user-avatar">U</a>
+            <button class="hamburger" id="mobile-nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="feed.html" class="active"><i class="fas fa-compass"></i> Discover</a>
+        <a href="studio.html"><i class="fas fa-magic"></i> Studio</a>
+        <a href="ar.html"><i class="fas fa-camera"></i> AR Mode</a>
+        <div class="divider"></div>
+        <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+        <a href="messages.html"><i class="fas fa-comment"></i> Messages</a>
+        <a href="creator.html"><i class="fas fa-plus-square"></i> Create Post</a>
+        <a href="#" id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <main class="feed-page">
+        <!-- Feed Categorization Tabs -->
+        <div class="feed-tabs">
+            <div class="feed-tab active" data-feed="for-you">For You</div>
+            <div class="feed-tab" data-feed="trending">Trending</div>
+            <div class="feed-tab" data-feed="following">Following</div>
+        </div>
+        
+        <div class="feed-layout">
+            <!-- Stories Section -->
+            <div class="stories-strip" id="stories-strip">
+                <!-- Will be populated by JS -->
+            </div>
+
+            <!-- Posts Feed Container -->
+            <div id="posts-container">
+                <!-- Posts will be dynamically loaded here -->
+                
+                <!-- Loading Skeleton (Initial state) -->
+                <div class="post-card post-skeleton"></div>
+                <div class="post-card post-skeleton"></div>
+            </div>
+            
+            <!-- Infinite Scroll Loader -->
+            <div id="feed-loader" style="text-align: center; padding: 40px 0; color: var(--violet); display: none;">
+                <i class="fas fa-circle-notch fa-spin fa-2x"></i>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Create Button -->
+    <a href="creator.html" class="fab-post" id="fab-post" title="Create New Post">
+        <i class="fas fa-plus"></i>
+    </a>
+
+    <!-- Comments Modal / Overlay -->
+    <div class="modal-overlay" id="comments-modal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Comments</h3>
+                <button class="modal-close" id="close-comments-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="comments-list" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px;">
+                <!-- Comments populated by JS -->
+            </div>
+            <div class="input-group">
+                <div class="input-icon-wrap">
+                    <input type="text" class="input-field" placeholder="Add a comment..." id="new-comment-input">
+                    <button class="btn btn-ghost btn-sm" style="position: absolute; right: 8px; top: 8px; border: none;" id="send-comment-btn">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/feed.js"></script>
+</body>
+</html>

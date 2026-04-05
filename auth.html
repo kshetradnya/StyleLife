@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleLife | Sign In or Join Our Style Community</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-bg">
+            <div class="auth-blob auth-blob-1"></div>
+            <div class="auth-blob auth-blob-2"></div>
+        </div>
+        
+        <div class="auth-container">
+            <div class="auth-logo">
+                <div class="auth-logo-icon"><i class="fas fa-scroll"></i></div>
+                <h1 class="auth-logo-name">Style<span>Life</span></h1>
+            </div>
+            
+            <div class="auth-card">
+                <!-- Login/Signup Tabs -->
+                <div class="auth-tabs" id="auth-tabs-toggle">
+                    <div class="auth-tab active" data-tab="login">Sign In</div>
+                    <div class="auth-tab" data-tab="signup">Join Now</div>
+                </div>
+                
+                <!-- Main Auth Step (Step 1) -->
+                <div id="auth-step-main" class="setup-step active">
+                    <form id="auth-form" class="auth-form">
+                        <h2 class="auth-form-title" id="auth-title">Welcome Back</h2>
+                        <p class="auth-form-sub" id="auth-subtitle">Sign in to your virtual style universe.</p>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Email Address</label>
+                            <div class="input-icon-wrap">
+                                <i class="fas fa-envelope input-prefix-icon"></i>
+                                <input type="email" class="input-field" placeholder="Enter your email" required id="auth-email">
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Password</label>
+                            <div class="input-icon-wrap">
+                                <i class="fas fa-lock input-prefix-icon"></i>
+                                <input type="password" class="input-field" placeholder="Create a password" required id="auth-password">
+                                <i class="fas fa-eye-slash input-eye" id="toggle-password"></i>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg" id="auth-submit-btn" style="margin-top: 12px;">Sign In</button>
+                        
+                        <div class="auth-divider">OR</div>
+                        <button type="button" class="social-auth-btn">
+                            <img src="https://www.gstatic.com/images/branding/product/2x/google_64dp.png" alt="Google">
+                            <span>Continue with Google</span>
+                        </button>
+                        
+                        <p class="auth-switch" id="auth-switch-text">
+                            First time here? <a id="switch-to-signup">Create an account</a>
+                        </p>
+                        
+                        <p class="auth-terms">
+                            By continuing, you agree to StyleLife's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                        </p>
+                    </form>
+                </div>
+                
+                <!-- Profile Setup Step (Step 2 - Only for Signup) -->
+                <div id="auth-step-profile" class="setup-step">
+                    <div class="setup-progress">
+                        <div class="setup-progress-fill" style="width: 100%;"></div>
+                    </div>
+                    
+                    <h2 class="auth-form-title">Complete Profile</h2>
+                    <p class="auth-form-sub">Tell us a bit about your style style.</p>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Username</label>
+                        <div class="input-icon-wrap">
+                            <i class="fas fa-at input-prefix-icon"></i>
+                            <input type="text" class="input-field" placeholder="e.g. style_guru_2026" id="setup-username">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Choose Avatar</label>
+                        <div class="avatar-picker" id="avatar-picker">
+                            <div class="avatar-option selected" data-avatar="👤">👤</div>
+                            <div class="avatar-option" data-avatar="✨">✨</div>
+                            <div class="avatar-option" data-avatar="👗">👗</div>
+                            <div class="avatar-option" data-avatar="👑">👑</div>
+                            <div class="avatar-option" data-avatar="🧥">🧥</div>
+                            <div class="avatar-option" data-avatar="🎩">🎩</div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Style Preferences</label>
+                        <div class="pref-grid" id="pref-grid">
+                            <div class="pref-chip" data-pref="Streetwear">Streetwear</div>
+                            <div class="pref-chip" data-pref="Formal">Formal</div>
+                            <div class="pref-chip" data-pref="Futuristic">Futuristic</div>
+                            <div class="pref-chip" data-pref="Vintage">Vintage</div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary btn-lg" id="finish-setup-btn" style="margin-top: 20px;">Enter Studio</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="skip-setup-btn" style="margin: 0 auto; width: fit-content; border: none;">Skip for now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

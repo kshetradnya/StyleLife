@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleLife Author | 3D Space</title>
+    <meta name="description" content="Explore the 3D studio of Alex Rivera. Interactive fashion design in the StyleLife universe.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- StyleLife Custom CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/author.css">
+    
+    <!-- Three.js UMD -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.154.0/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.154.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.154.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body>
+    <!-- Navbar (Hidden/Overlay-friendly) -->
+    <nav class="navbar" style="background: rgba(0, 0, 0, 0.4); border-bottom: none;">
+        <a href="index.html" class="navbar-brand">
+            <div class="logo-icon"><i class="fas fa-scroll"></i></div>
+            <span>StyleLife</span>
+        </a>
+        
+        <div class="navbar-links">
+            <a href="feed.html">StyleScroll Feed</a>
+            <a href="studio.html">Studio</a>
+            <a href="ar.html">AR Mode</a>
+        </div>
+        
+        <div class="navbar-actions">
+            <a href="profile.html" class="nav-avatar" id="nav-user-avatar">U</a>
+        </div>
+    </nav>
+
+    <main class="author-page">
+        <!-- Three.js Canvas Container -->
+        <div id="author-canvas-container"></div>
+        
+        <!-- UI Overlays -->
+        <div class="author-ui">
+            <header class="author-ui-header">
+                <div class="author-creator-card">
+                    <div class="author-creator-avatar">
+                        <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=StyleAuthor" alt="Style Author" style="width: 100%; border-radius: 50%;">
+                    </div>
+                    <div class="author-creator-info">
+                        <h2 class="author-creator-name">Alex Rivera</h2>
+                        <span class="author-creator-tag">@StyleArchitect_26</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="author-controls-hint">
+                <div class="author-control-item">
+                    <i class="fas fa-mouse author-control-icon"></i>
+                    <span>Left-click: Rotate</span>
+                </div>
+                <div class="author-control-item">
+                    <i class="fas fa-mouse-pointer author-control-icon"></i>
+                    <span>Right-click: Pan</span>
+                </div>
+                <div class="author-control-item">
+                    <i class="fas fa-arrows-alt-v author-control-icon"></i>
+                    <span>Scroll: Zoom</span>
+                </div>
+            </div>
+            
+            <aside class="author-ui-sidebar">
+                <div class="author-stat-bubble" title="Total Likes">
+                    <i class="fas fa-heart author-stat-icon"></i>
+                    <span class="author-stat-value">124k</span>
+                </div>
+                <div class="author-stat-bubble" title="3D Models Created">
+                    <i class="fas fa-cube author-stat-icon"></i>
+                    <span class="author-stat-value">42</span>
+                </div>
+                <div class="author-stat-bubble" title="Collaboration Invitations">
+                    <i class="fas fa-paper-plane author-stat-icon"></i>
+                    <span class="author-stat-value">15</span>
+                </div>
+                <div class="author-stat-bubble" title="Share Space">
+                    <i class="fas fa-share-alt author-stat-icon"></i>
+                </div>
+            </aside>
+            
+            <footer class="author-ui-footer">
+                <div class="author-description-card">
+                    <h1 class="author-description-title">The "Cyber-Luxe" Series</h1>
+                    <p class="author-description-text">Alex explores the intersection of street utility and futuristic formal wear. Every look is custom-fitted in the StyleLife 3D Hub.</p>
+                    <div style="margin-top: 16px; display: flex; gap: 12px; pointer-events: auto;">
+                        <button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Follow Creator</button>
+                        <button class="btn btn-secondary btn-sm">Support Project</button>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        
+        <!-- Loading Screen -->
+        <div class="author-loading" id="author-loading">
+            <div class="author-loading-spinner"></div>
+            <p class="author-loading-text">LOADING STYLE UNIVERSE...</p>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/author.js"></script>
+</body>
+</html>

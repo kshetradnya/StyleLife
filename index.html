@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleLife | Your Virtual Fashion Studio</title>
+    <meta name="description" content="Experiment with styles, hairstyles, and outfits in AR. Share your looks with the StyleLife community.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/landing.css">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d0d1a">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="main-nav">
+        <a href="index.html" class="navbar-brand">
+            <div class="logo-icon"><i class="fas fa-scroll"></i></div>
+            <span>StyleLife</span>
+        </a>
+        
+        <div class="navbar-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="feed.html">StyleScroll Feed</a>
+            <a href="studio.html">Studio</a>
+            <a href="ar.html">AR Mode</a>
+        </div>
+        
+        <div class="navbar-actions">
+            <button class="theme-toggle" id="theme-toggle" title="Toggle Light/Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <div id="nav-auth-buttons">
+                <a href="auth.html" class="btn btn-secondary btn-sm">Sign In</a>
+                <a href="auth.html?mode=signup" class="btn btn-primary btn-sm">Start Styling</a>
+            </div>
+            <div id="nav-user-profile" style="display: none;">
+                <a href="profile.html" class="nav-avatar" id="nav-user-avatar">U</a>
+            </div>
+            <button class="hamburger" id="mobile-nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="active"><i class="fas fa-home"></i> Home</a>
+        <a href="feed.html"><i class="fas fa-compass"></i> StyleScroll Feed</a>
+        <a href="studio.html"><i class="fas fa-magic"></i> Studio</a>
+        <a href="ar.html"><i class="fas fa-camera"></i> AR Mode</a>
+        <div class="divider"></div>
+        <div id="mobile-auth-links">
+            <a href="auth.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+            <a href="auth.html?mode=signup"><i class="fas fa-user-plus"></i> Join Now</a>
+        </div>
+        <div id="mobile-user-links" style="display: none;">
+            <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+            <a href="messages.html"><i class="fas fa-comment"></i> Messages</a>
+            <a href="creator.html"><i class="fas fa-plus-square"></i> Create Post</a>
+            <a href="#" id="mobile-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+
+    <main class="page-wrapper">
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="hero-bg">
+                <div class="hero-blob blob-1"></div>
+                <div class="hero-blob blob-2"></div>
+                <div class="hero-blob blob-3"></div>
+                <canvas id="hero-particles" class="particles-canvas"></canvas>
+            </div>
+            
+            <div class="hero-content">
+                <div class="hero-left">
+                    <div class="hero-eyebrow">
+                        <span class="dot"></span> 
+                        <span>New: AI Reality Styling Tool live</span>
+                    </div>
+                    <h1 class="hero-title">Elevate Your <span class="gradient-text">Identity</span> Through Style.</h1>
+                    <p class="hero-desc">The first fashion-first social platform with integrated AR styling, AI suggestions, and high-fidelity 3D showcases.</p>
+                    <div class="hero-actions">
+                        <a href="auth.html?mode=signup" class="btn btn-primary btn-lg">Start Free Trial</a>
+                        <a href="feed.html" class="btn btn-secondary btn-lg">Explore Feed</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-num" data-val="12000">12k+</div>
+                            <div class="stat-label">Daily Looks</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-num" data-val="50">50+</div>
+                            <div class="stat-label">Style Experts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-num" data-val="98">98%</div>
+                            <div class="stat-label">Happy Users</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hero-right">
+                    <div class="hero-preview-stack">
+                        <!-- Main Card -->
+                        <div class="preview-card-main">
+                            <div class="preview-card-img">
+                                <div class="preview-avatar-display">✨</div>
+                                <div class="post-privacy-overlay">
+                                    <i class="fas fa-shield-alt"></i> Privacy ON
+                                </div>
+                            </div>
+                            <div class="preview-card-info">
+                                <p class="preview-username">ModernStylist_24</p>
+                                <p class="preview-caption">Late night neon formal look. AI suggested the cyan tie! 🌃</p>
+                                <div class="preview-tags">
+                                    <span class="preview-tag">#Futuristic</span>
+                                    <span class="preview-tag">#NeonVibe</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Floating Items -->
+                        <div class="preview-card-float float-card-1">
+                            <i class="fas fa-heart float-icon" style="color: var(--pink);"></i>
+                            <span class="float-likes">4.2k</span>
+                        </div>
+                        <div class="preview-card-float float-card-2">
+                            <i class="fas fa-sparkles float-icon" style="color: var(--gold);"></i>
+                            <span class="float-likes">AI Suggestion</span>
+                        </div>
+                        <div class="preview-card-float float-card-3">
+                            <i class="fas fa-magic float-icon" style="color: var(--violet);"></i>
+                            <span class="float-likes">Perfect Match</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section features-section" id="features">
+            <div class="container">
+                <div class="features-header reveal">
+                    <h2 class="section-title">The Future of <span class="gradient-text">Styling</span></h2>
+                    <p class="section-subtitle">A powerful toolset for creators, stylists, and fashion enthusiasts.</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card reveal" style="transition-delay: 0.1s;">
+                        <div class="feature-icon"><i class="fas fa-magic"></i></div>
+                        <h3 class="feature-title">Styling Studio</h3>
+                        <p class="feature-desc">Drag and drop outfits, hairstyles, and jewellery onto your photos with precision layer control.</p>
+                    </div>
+                    <div class="feature-card reveal" style="transition-delay: 0.2s;">
+                        <div class="feature-icon"><i class="fas fa-video"></i></div>
+                        <h3 class="feature-title">Real-time AR</h3>
+                        <h3 class="feature-title">Live AR Mirror</h3>
+                        <p class="feature-desc">See hairstyles and accessories mapped to your movement instantly using our webcam integration.</p>
+                    </div>
+                    <div class="feature-card reveal" style="transition-delay: 0.3s;">
+                        <div class="feature-icon"><i class="fas fa-shield-halved"></i></div>
+                        <h3 class="feature-title">Privacy Mode</h3>
+                        <p class="feature-desc">Post with complete privacy. Strip metadata, blur backgrounds, and use AI-generated avatars.</p>
+                    </div>
+                    <div class="feature-card reveal" style="transition-delay: 0.4s;">
+                        <div class="feature-icon"><i class="fas fa-users"></i></div>
+                        <h3 class="feature-title">Social Feed</h3>
+                        <p class="feature-desc">Discover the trending looks of the day and remix them to suit your unique taste.</p>
+                    </div>
+                    <div class="feature-card reveal" style="transition-delay: 0.5s;">
+                        <div class="feature-icon"><i class="fas fa-cube"></i></div>
+                        <h3 class="feature-title">3D Hub</h3>
+                        <p class="feature-desc">Showcase your own 3D creator models. Rotate, zoom, and interact in full Three.js fidelity.</p>
+                    </div>
+                    <div class="feature-card reveal" style="transition-delay: 0.6s;">
+                        <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                        <h3 class="feature-title">AI Suggestions</h3>
+                        <p class="feature-desc">Get personalized outfit recommendations powered by Gemini based on your preferences.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="section how-section" id="how-it-works">
+            <div class="container">
+                <div class="features-header reveal">
+                    <h2 class="section-title">Three Steps to <span class="gradient-text">Glow Up</span></h2>
+                </div>
+                
+                <div class="steps-grid">
+                    <div class="step-card reveal" style="transition-delay: 0.1s;">
+                        <div class="step-num">1</div>
+                        <h3 class="step-title">Upload & Scan</h3>
+                        <p class="step-desc">Pick a photo or use your camera to let our system map your unique features.</p>
+                    </div>
+                    <div class="step-card reveal" style="transition-delay: 0.2s;">
+                        <div class="step-num">2</div>
+                        <h3 class="step-title">Design Your Look</h3>
+                        <p class="step-desc">Choose from thousands of items. Mix, match, and colorize until it's perfect.</p>
+                    </div>
+                    <div class="step-card reveal" style="transition-delay: 0.3s;">
+                        <div class="step-num">3</div>
+                        <h3 class="step-title">Share the Vibe</h3>
+                        <p class="step-desc">Post to the community with tailored privacy settings and watch your following grow.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trending Strip -->
+        <section class="trending-section">
+            <div class="trending-track" id="trending-track">
+                <!-- Will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="section cta-section">
+            <div class="container">
+                <div class="cta-banner reveal">
+                    <div class="cta-banner-content">
+                        <h2 class="cta-title">Ready to define your style?</h2>
+                        <p class="cta-desc">Join 100,000+ creators and start your fashion journey today.</p>
+                        <a href="auth.html?mode=signup" class="btn btn-primary btn-lg">Get Started for Free</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container footer-inner">
+                <div class="footer-left">
+                    <a href="#" class="navbar-brand">
+                        <div class="logo-icon"><i class="fas fa-scroll"></i></div>
+                        <span>StyleLife</span>
+                    </a>
+                    <p style="margin-top: 10px;">&copy; 2026 StyleLife. All rights reserved.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Contact Us</a>
+                    <a href="author.html">Meet the Team</a>
+                </div>
+                
+                <div class="footer-social">
+                    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Global Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/landing.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleLife | Create Your Post</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/creator.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <div class="logo-icon"><i class="fas fa-scroll"></i></div>
+            <span>StyleLife</span>
+        </a>
+        
+        <div class="navbar-links">
+            <a href="feed.html">StyleScroll Feed</a>
+            <a href="studio.html">Studio</a>
+            <a href="ar.html">AR Mode</a>
+        </div>
+        
+        <div class="navbar-actions">
+            <a href="profile.html" class="nav-avatar" id="nav-user-avatar">U</a>
+        </div>
+    </nav>
+
+    <main class="creator-page">
+        <div class="creator-container">
+            <!-- Left Side: Preview -->
+            <aside class="creator-preview">
+                <div class="creator-preview-card">
+                    <div class="creator-preview-img" id="creator-preview-img">
+                        <!-- Preview image will be injected here -->
+                        <div class="empty-state">
+                            <div class="icon"><i class="fas fa-image"></i></div>
+                            <span>No image selected</span>
+                        </div>
+                    </div>
+                    <div class="creator-preview-info">
+                        <div class="avatar avatar-sm avatar-grad" id="preview-avatar">U</div>
+                        <span class="creator-preview-username" id="preview-username">Your Username</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 24px; padding: 16px; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border);">
+                    <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; text-transform: uppercase;">Preview Tip</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">This is how your post will appear in the global feed. Make sure your style pops!</p>
+                </div>
+            </aside>
+
+            <!-- Right Side: Creation Form -->
+            <form class="creator-form" id="creator-form">
+                <div>
+                    <h1 class="creator-form-title">Create New Look</h1>
+                    <p class="creator-form-desc">Share your virtual style with the world.</p>
+                </div>
+
+                <!-- Step 1: Image Import -->
+                <div class="creator-input-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label class="creator-input-label">Media Source</label>
+                        <span style="font-size: 0.75rem; color: var(--violet-light); font-weight: 600; cursor: pointer;" id="import-from-studio">Import from Studio</span>
+                    </div>
+                    
+                    <div id="image-upload-zone" style="background: var(--bg-card); border: 2px dashed var(--border); border-radius: 16px; padding: 30px; text-align: center; cursor: pointer; transition: all var(--t-fast);">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 24px; color: var(--text-muted); margin-bottom: 12px;"></i>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">Click to upload or drag & drop</p>
+                        <input type="file" id="creator-image-input" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- Step 2: Content -->
+                <div class="creator-input-group">
+                    <label class="creator-input-label">Caption</label>
+                    <textarea class="input-field creator-textarea" id="creator-caption" placeholder="Describe your style... use #tags for better reach!"></textarea>
+                </div>
+
+                <div class="creator-input-group">
+                    <label class="creator-input-label">Target Audience</label>
+                    <select class="input-field" id="creator-audience">
+                        <option value="public">Public (Everyone can see)</option>
+                        <option value="followers">Followers Only</option>
+                        <option value="private">Private (Only me)</option>
+                    </select>
+                </div>
+
+                <!-- Step 3: Privacy Mode -->
+                <div class="privacy-toggle-card" id="privacy-toggle-card">
+                    <div class="privacy-toggle-header">
+                        <div class="privacy-toggle-title">
+                            <i class="fas fa-shield-halved icon"></i>
+                            <span>Privacy Mode</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="privacy-mode-toggle">
+                            <div class="toggle-track">
+                                <div class="toggle-thumb"></div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <p class="privacy-toggle-desc">Enable high-privacy sharing. Our AI system will sanitize your post before it goes live.</p>
+                    
+                    <div class="privacy-options">
+                        <div class="privacy-option-item">
+                            <div class="privacy-option-info">
+                                <span class="privacy-option-name">Metadata Strip</span>
+                                <span class="privacy-option-hint">Remove GPS, camera, and timestamp data</span>
+                            </div>
+                            <i class="fas fa-check-circle" style="color: var(--green);"></i>
+                        </div>
+                        
+                        <div class="privacy-option-item">
+                            <div class="privacy-option-info">
+                                <span class="privacy-option-name">Background Blur</span>
+                                <span class="privacy-option-hint">AI identifies and blurs your surroundings</span>
+                            </div>
+                            <label class="toggle-switch" style="transform: scale(0.8);">
+                                <input type="checkbox" checked id="toggle-bg-blur">
+                                <div class="toggle-track"><div class="toggle-thumb"></div></div>
+                            </label>
+                        </div>
+
+                        <div class="privacy-option-item">
+                            <div class="privacy-option-info">
+                                <span class="privacy-option-name">AI Avatar Mode</span>
+                                <span class="privacy-option-hint">Replace your real image with an AI representation</span>
+                            </div>
+                            <label class="toggle-switch" style="transform: scale(0.8);">
+                                <input type="checkbox" id="toggle-ai-avatar">
+                                <div class="toggle-track"><div class="toggle-thumb"></div></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="creator-footer">
+                    <button type="button" class="btn btn-secondary btn-lg" id="discard-btn">Discard</button>
+                    <button type="submit" class="btn btn-primary btn-lg" id="publish-btn">Publish Style</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Global Toast -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/creator.js"></script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+/* ============================================================
+   StyleScroll — Feed Page Styles
+   ============================================================ */
+
+.feed-page {
+  padding-top: var(--nav-h);
+  background: var(--bg-primary);
+  min-height: 100vh;
+}
+
+.feed-layout {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ── Feed Header ────────────────────────────────────────── */
+.feed-tabs {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 100;
+  background: rgba(13, 13, 26, 0.8);
+  backdrop-filter: blur(20px);
+  padding: 12px 0;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.feed-tab {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--t-fast);
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.feed-tab:hover {
+  color: var(--text-primary);
+}
+
+.feed-tab.active {
+  color: var(--violet-light);
+}
+
+.feed-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--grad-main);
+  border-radius: 2px;
+}
+
+/* ── Feed Post Card ─────────────────────────────────────── */
+.post-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--t-med);
+}
+
+.post-header {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.post-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--grad-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+}
+
+.post-username {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.post-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.post-more-btn {
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* Post Content */
+.post-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: #000;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-privacy-overlay {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Post Interactions */
+.post-actions {
+  padding: 16px 16px 8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.action-btn {
+  font-size: 24px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: transform var(--t-fast);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+}
+
+.action-btn.liked {
+  color: var(--pink);
+  animation: heartPop 0.4s ease;
+}
+
+.post-likes {
+  padding: 0 16px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.post-description {
+  padding: 0 16px 12px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.post-hashtags {
+  color: var(--violet-light);
+  margin-left: 4px;
+}
+
+.post-comments-summary {
+  padding: 0 16px 16px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* ── Stories Strip ───────────────────────────────────────── */
+.stories-strip {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 8px 0 24px;
+  scrollbar-width: none;
+}
+
+.stories-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.story-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 72px;
+}
+
+.story-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  padding: 3px;
+  background: var(--grad-main);
+  cursor: pointer;
+}
+
+.story-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.story-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.story-name {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  max-width: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Floating Action Button ──────────────────────────────── */
+.fab-post {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--grad-main);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 8px 32px rgba(155, 93, 229, 0.4);
+  cursor: pointer;
+  z-index: 1000;
+  transition: all var(--t-med);
+}
+
+.fab-post:hover {
+  transform: scale(1.1) rotate(90deg);
+}
+
+/* ── Loading Skeleton ────────────────────────────────────── */
+.post-skeleton {
+  background: var(--bg-secondary);
+  border-radius: 24px;
+  height: 400px;
+  overflow: hidden;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .feed-layout {
+    padding: 12px 0;
+  }
+  .post-card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}

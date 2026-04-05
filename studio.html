@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleLife Studio | Design Your Masterpiece</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/studio.css">
+</head>
+<body>
+    <!-- Main Navigation (Minimal for Studio) -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <div class="logo-icon"><i class="fas fa-scroll"></i></div>
+            <span>StyleLife</span>
+        </a>
+        
+        <div class="navbar-links">
+            <a href="feed.html">StyleScroll Feed</a>
+            <a href="studio.html" class="active">Studio</a>
+            <a href="ar.html">AR Mode</a>
+        </div>
+        
+        <div class="navbar-actions">
+            <button class="btn btn-secondary btn-sm" id="studio-reset-btn">Reset</button>
+            <button class="btn btn-primary btn-sm" id="studio-save-btn">Save Look</button>
+            <a href="profile.html" class="nav-avatar" id="nav-user-avatar">U</a>
+        </div>
+    </nav>
+
+    <main class="studio-page">
+        <!-- Studio Header / Toolbar -->
+        <div class="studio-header">
+            <div class="studio-title">
+                Virtual Styling Studio
+                <span class="badge badge-violet">v1.2 PRO</span>
+            </div>
+            
+            <div class="studio-header-actions">
+                <button class="icon-btn" title="Undo" id="undo-btn"><i class="fas fa-undo"></i></button>
+                <button class="icon-btn" title="Redo" id="redo-btn"><i class="fas fa-redo"></i></button>
+                <button class="icon-btn" title="Download" id="download-btn"><i class="fas fa-download"></i></button>
+                <button class="btn btn-ghost btn-sm" id="comparison-toggle">Before/After</button>
+            </div>
+        </div>
+
+        <div class="studio-layout">
+            <!-- Left Sidebar: Assets Library -->
+            <aside class="studio-sidebar">
+                <div class="sidebar-tabs" id="sidebar-tabs">
+                    <div class="sidebar-tab active" data-tab="hair">Hair</div>
+                    <div class="sidebar-tab" data-tab="clothing">Outfits</div>
+                    <div class="sidebar-tab" data-tab="accessories">Bling</div>
+                    <div class="sidebar-tab" data-tab="ai">AI Magic</div>
+                </div>
+                
+                <div class="sidebar-content" id="sidebar-content">
+                    <!-- Hairstyle Tab -->
+                    <div class="tab-content active" id="tab-hair">
+                        <p class="sidebar-section-title">Color Palette</p>
+                        <div class="color-palette" id="hair-color-palette">
+                            <!-- Populated by JS -->
+                        </div>
+                        
+                        <p class="sidebar-section-title">Styles</p>
+                        <div class="item-grid" id="hair-style-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Clothing Tab -->
+                    <div class="tab-content" id="tab-clothing">
+                        <p class="sidebar-section-title">Categories</p>
+                        <div class="ai-combo-chips">
+                            <span class="chip active">All</span>
+                            <span class="chip">Streetwear</span>
+                            <span class="chip">Formal</span>
+                            <span class="chip">Casual</span>
+                        </div>
+                        
+                        <p class="sidebar-section-title">Collections</p>
+                        <div class="item-grid" id="clothing-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Bling Tab -->
+                    <div class="tab-content" id="tab-accessories">
+                        <p class="sidebar-section-title">Jewellery & Bling</p>
+                        <div class="item-grid" id="accessories-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- AI Tab -->
+                    <div class="tab-content" id="tab-ai">
+                        <div class="ai-suggestion-banner">
+                            <div class="ai-banner-title">
+                                <i class="fas fa-sparkles"></i> AI Style Engine
+                            </div>
+                            <p style="font-size: 0.8rem; line-height: 1.4;">Based on current trends and your history, we suggest this combo:</p>
+                            <div class="ai-combo-chips" id="ai-combo-suggestion">
+                                <span class="ai-chip">Cyberpunk Undercut</span>
+                                <span class="ai-chip">Neon Varsity Jacket</span>
+                            </div>
+                            <button class="btn btn-primary btn-sm" id="apply-ai-combo">Apply Combo</button>
+                        </div>
+                        
+                        <button class="btn btn-secondary btn-sm" id="randomize-outfit-btn" style="margin-top: 12px; width: 100%;">
+                            <i class="fas fa-dice"></i> Randomize All
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Canvas Area -->
+            <section class="studio-canvas-area">
+                <!-- Upload State -->
+                <div id="upload-zone">
+                    <input type="file" id="photo-upload" accept="image/*">
+                    <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <div class="upload-text">Upload photo or drag & drop here</div>
+                    <div class="upload-sub">Optimal size: 3:4 aspect ratio</div>
+                    <div class="upload-actions-row">
+                        <button class="btn btn-secondary btn-sm" id="use-sample-btn">Try Sample Photo</button>
+                        <a href="ar.html" class="btn btn-ghost btn-sm"><i class="fas fa-camera"></i> Use Webcam</a>
+                    </div>
+                </div>
+
+                <!-- Active Canvas State -->
+                <div id="canvas-container">
+                    <canvas id="base-canvas"></canvas>
+                    <canvas id="overlay-canvas"></canvas>
+                </div>
+                
+                <!-- Canvas Toolbar Utilities -->
+                <div class="canvas-toolbar" id="canvas-toolbar" style="display: none;">
+                    <div class="canvas-tool-btn active" data-tool="move">
+                        <div class="tool-icon"><i class="fas fa-arrows-alt"></i></div>
+                        <span>Move</span>
+                    </div>
+                    <div class="canvas-tool-btn" data-tool="resize">
+                        <div class="tool-icon"><i class="fas fa-expand-alt"></i></div>
+                        <span>Scale</span>
+                    </div>
+                    <div class="canvas-tool-btn" data-tool="rotate">
+                        <div class="tool-icon"><i class="fas fa-sync-alt"></i></div>
+                        <span>Rotate</span>
+                    </div>
+                    <div class="canvas-tool-btn" id="delete-selected-btn">
+                        <div class="tool-icon"><i class="fas fa-trash"></i></div>
+                        <span>Remove</span>
+                    </div>
+                </div>
+
+                <!-- Comparison State -->
+                <div class="before-after-wrap" id="before-after-wrap">
+                    <div class="before-after-label">
+                        <span class="before-txt">BEFORE</span>
+                        <span class="after-txt">AFTER</span>
+                    </div>
+                    <div class="comparison-slider-wrap">
+                        <img src="" alt="before" class="comparison-img" id="comparison-before-img">
+                        <div class="comparison-overlay-img" id="comparison-overlay-img">
+                            <img src="" alt="after" id="comparison-after-img">
+                        </div>
+                        <div class="comparison-handle" id="comparison-handle"></div>
+                        <input type="range" min="0" max="100" value="50" class="comparison-range" id="comparison-range">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Sidebar: Layers -->
+            <aside class="studio-layers">
+                <div class="layers-header">
+                    Layers
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="layers-list" id="layers-list">
+                    <!-- Base Photo (Locked) -->
+                    <div class="layer-item" data-layer="base">
+                        <span class="layer-emoji">🖼️</span>
+                        <span class="layer-name">Base Photo</span>
+                        <div class="layer-actions">
+                            <div class="layer-action-btn"><i class="fas fa-lock"></i></div>
+                        </div>
+                    </div>
+                    <!-- Overlays populate here -->
+                </div>
+                
+                <div class="random-gen-bar">
+                    <div class="random-gen-inner">
+                        <span class="random-gen-label">Gemini AI Help</span>
+                        <button class="icon-btn" id="ai-smart-suggest" title="Get AI Help"><i class="fas fa-brain"></i></button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Global Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/studio.js"></script>
+</body>
+</html>

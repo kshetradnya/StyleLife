@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleLife Profile | My Fashion Journey</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <div class="logo-icon"><i class="fas fa-scroll"></i></div>
+            <span>StyleLife</span>
+        </a>
+        
+        <div class="navbar-links">
+            <a href="feed.html">StyleScroll Feed</a>
+            <a href="studio.html">Studio</a>
+            <a href="ar.html">AR Mode</a>
+        </div>
+        
+        <div class="navbar-actions">
+            <button class="theme-toggle" id="theme-toggle" title="Toggle Light/Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <a href="messages.html" class="icon-btn" title="Messages"><i class="fas fa-comment"></i></a>
+            <button class="icon-btn" id="logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </nav>
+
+    <main class="profile-page">
+        <div class="profile-container">
+            <!-- Profile Header -->
+            <header class="profile-header">
+                <div class="profile-avatar-wrapper">
+                    <div class="profile-avatar">
+                        <div class="profile-avatar-inner" id="user-avatar-display">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-info">
+                    <div class="profile-title-row">
+                        <h1 class="profile-username" id="user-username-display">Username</h1>
+                        <div class="profile-actions">
+                            <button class="btn btn-secondary btn-sm" id="edit-profile-btn">Edit Profile</button>
+                            <button class="icon-btn" title="Profile Settings"><i class="fas fa-cog"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-stats">
+                        <div class="profile-stat-item">
+                            <span class="profile-stat-num" id="post-count">0</span>
+                            <span class="profile-stat-label">posts</span>
+                        </div>
+                        <div class="profile-stat-item">
+                            <span class="profile-stat-num" id="follower-count">1.2k</span>
+                            <span class="profile-stat-label">followers</span>
+                        </div>
+                        <div class="profile-stat-item">
+                            <span class="profile-stat-num" id="following-count">482</span>
+                            <span class="profile-stat-label">following</span>
+                        </div>
+                    </div>
+                    
+                    <p class="profile-bio" id="user-bio-display">Fashion creator and AR enthusiast. Crafting new looks every day! ✨</p>
+                </div>
+            </header>
+
+            <!-- Profile Tabs -->
+            <nav class="profile-tabs-header">
+                <div class="profile-tab active" data-tab="posts">
+                    <i class="fas fa-th"></i>
+                    <span>Posts</span>
+                </div>
+                <div class="profile-tab" data-tab="saved">
+                    <i class="far fa-bookmark"></i>
+                    <span>Saved</span>
+                </div>
+                <div class="profile-tab" data-tab="challenges">
+                    <i class="fas fa-trophy"></i>
+                    <span>Challenges</span>
+                </div>
+            </nav>
+
+            <!-- Profile Grid Content -->
+            <div id="posts-grid" class="profile-grid">
+                <!-- User posts injected by JS -->
+                
+                <!-- Initial Empty State -->
+                <div class="profile-empty-state" id="empty-posts-state">
+                    <div class="profile-empty-icon"><i class="fas fa-camera"></i></div>
+                    <h2>No Posts Yet</h2>
+                    <p>When you share your first style, it will show up here.</p>
+                    <a href="studio.html" class="btn btn-primary btn-sm" style="margin-top: 12px;">Capture Your First Style</a>
+                </div>
+            </div>
+
+            <div id="saved-grid" class="profile-grid" style="display: none;">
+                <!-- Saved items injected by JS -->
+                <div class="profile-empty-state">
+                    <div class="profile-empty-icon"><i class="far fa-bookmark"></i></div>
+                    <h2>Nothing Saved</h2>
+                    <p>Save looks from other creators to see them here.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay" id="edit-profile-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Profile</h3>
+                <button class="modal-close" id="close-modal-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="edit-profile-form" style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="input-group">
+                    <label class="input-label">Bio</label>
+                    <textarea class="input-field" id="edit-bio" placeholder="Tell the world about your style..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Website</label>
+                    <input type="text" class="input-field" id="edit-website" placeholder="https://yourlink.com">
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>
